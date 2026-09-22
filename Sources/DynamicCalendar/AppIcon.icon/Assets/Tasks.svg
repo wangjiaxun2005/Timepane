@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Tasks</title>
+  <g id="Tasks" stroke="none" fill="none" fill-rule="evenodd" stroke-width="1">
+    <path d="M430,260 L760,260 C775.464,260 788,272.536 788,288 L788,326 C788,341.464 775.464,354 760,354 L430,354 C414.536,354 402,341.464 402,326 L402,288 C402,272.536 414.536,260 430,260 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+    <path d="M430,465 L760,465 C775.464,465 788,477.536 788,493 L788,531 C788,546.464 775.464,559 760,559 L430,559 C414.536,559 402,546.464 402,531 L402,493 C402,477.536 414.536,465 430,465 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+    <path d="M430,670 L660,670 C675.464,670 688,682.536 688,698 L688,736 C688,751.464 675.464,764 660,764 L430,764 C414.536,764 402,751.464 402,736 L402,698 C402,682.536 414.536,670 430,670 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+  </g>
+</svg>

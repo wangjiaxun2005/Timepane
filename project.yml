@@ -1,0 +1,55 @@
+name: DynamicCalendar
+options:
+  bundleIdPrefix: com.wangjiaxun
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    SWIFT_VERSION: "5.0"
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.0
+    DEVELOPMENT_LANGUAGE: zh-Hans
+    ENABLE_HARDENED_RUNTIME: YES
+targets:
+  DynamicCalendar:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/DynamicCalendar
+        excludes:
+          - Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wangjiaxun.DynamicCalendar
+        PRODUCT_NAME: Timepane
+        PRODUCT_MODULE_NAME: DynamicCalendar
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_FILE: Config/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Config/DynamicCalendar.entitlements
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: Apple Development
+        DEVELOPMENT_TEAM: 6YK3BP49DA
+        ENABLE_APP_SANDBOX: YES
+    scheme:
+      testTargets:
+        - DynamicCalendarTests
+  DynamicCalendarTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/DynamicCalendarTests
+    dependencies:
+      - target: DynamicCalendar
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wangjiaxun.DynamicCalendarTests
+        PRODUCT_MODULE_NAME: DynamicCalendarTests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGNING_ALLOWED: YES
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: Apple Development
+        DEVELOPMENT_TEAM: 6YK3BP49DA
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Timepane.app/Contents/MacOS/Timepane"
+        BUNDLE_LOADER: "$(TEST_HOST)"

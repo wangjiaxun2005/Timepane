@@ -1,0 +1,63 @@
+{
+  "color-space-for-untagged-svg-colors" : "display-p3",
+  "fill-specializations" : [
+    {
+      "value" : {
+        "solid" : "extended-gray:0.96000,1.00000"
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : {
+        "solid" : "extended-gray:0.03000,1.00000"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "layers": [
+        {
+          "image-name": "Timeline.svg",
+          "name": "Timeline",
+          "fill" : {
+            "automatic-gradient" : "display-p3:0.03000,0.50000,1.00000,1.00000"
+          },
+          "glass" : true
+        },
+        {
+          "image-name" : "Tasks.svg",
+          "name" : "Tasks",
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "extended-gray:0.14000,0.92000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:1.00000,0.94000"
+              }
+            }
+          ],
+          "glass" : true
+        }
+      ],
+      "lighting" : "individual",
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.24
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.20
+      }
+    }
+  ],
+  "supported-platforms": {
+    "circles": [
+      "watchOS"
+    ],
+    "squares": "shared"
+  }
+}
