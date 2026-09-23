@@ -28,7 +28,9 @@ final class EventDraftTests: XCTestCase {
     XCTAssertLessThan(shape.growth, 0.08)
     XCTAssertGreaterThan(shape.width, 1)
     XCTAssertEqual(clock.advance(to: 10.20), delayed)
-    for frame in 1...31 { _ = clock.advance(to: 10.226 + Double(frame) / 60) }
+    for frame in 1...Int(ceil(EventFissionMotion.openingDuration * 60)) {
+      _ = clock.advance(to: 10.226 + Double(frame) / 60)
+    }
     XCTAssertGreaterThan(clock.elapsed, EventFissionMotion.openingDuration)
   }
 
@@ -216,6 +218,30 @@ final class EventDraftTests: XCTestCase {
     let returnDuration = Double(settled - buttonPeak) / 1000 * EventFissionMotion.openingDuration
     XCTAssertLessThanOrEqual(returnDuration, 0.16)
     XCTAssertEqual(frames.last!.body, destination)
+  }
+
+  func testEditorRecoilSoftLandsWithoutASecondBounce() {
+    func offset(at time: Double) -> Double {
+      EventFissionMotion.channels(at: time / EventFissionMotion.openingDuration,
+        closing: false).editorOverrun
+    }
+    XCTAssertEqual(offset(at: 0.35), 12, accuracy: 0.000001)
+    XCTAssertGreaterThan(offset(at: 0.42), 6,
+      "The editor should still be returning after the former abrupt rebound")
+    XCTAssertGreaterThan(offset(at: 0.50), 1)
+    let returns = (35...58).map { offset(at: Double($0) / 100) }
+    for (before, after) in zip(returns, returns.dropFirst()) {
+      XCTAssertLessThanOrEqual(after, before, "The editor must not bounce past its resting position")
+    }
+    let tenMillisecondTravel = (43...57).map { step in
+      offset(at: Double(step) / 100) - offset(at: Double(step + 1) / 100)
+    }
+    for (before, after) in zip(tenMillisecondTravel, tenMillisecondTravel.dropFirst()) {
+      XCTAssertLessThanOrEqual(after, before + 0.000001,
+        "After the turn, each interval should be slower than the last")
+    }
+    XCTAssertLessThan(offset(at: 0.57), 0.01)
+    XCTAssertEqual(offset(at: EventFissionMotion.openingDuration), 0, accuracy: 0.000001)
   }
 
   func testFissionClosingDoesNotLeaveALongEmptyAbsorptionTail() {

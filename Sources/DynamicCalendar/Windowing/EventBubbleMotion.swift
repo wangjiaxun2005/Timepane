@@ -138,9 +138,11 @@ enum EventFissionMotion {
   private struct Track {
     let keys: [(time: Double, value: Double)]
     let slopes: [Double]
+    let softLanding: Bool
 
-    init(_ keys: [(Double, Double)]) {
+    init(_ keys: [(Double, Double)], softLanding: Bool = false) {
       self.keys = keys
+      self.softLanding = softLanding
       var slopes = Array(repeating: 0.0, count: keys.count)
       for i in 1..<(keys.count - 1) {
         let a = (keys[i].1 - keys[i - 1].1) / (keys[i].0 - keys[i - 1].0)
@@ -157,6 +159,12 @@ enum EventFissionMotion {
       guard let j = keys.firstIndex(where: { $0.time > time }) else { return keys.last!.value }
       let i = j - 1, h = keys[j].time - keys[i].time
       let u = (time - keys[i].time) / h, u2 = u * u, u3 = u2 * u
+      if softLanding && j == keys.count - 1 {
+        // Turn once at the peak, then spend most of the return slowing down.
+        // The tail reaches the endpoint with zero speed and acceleration.
+        let rest = 1 - u
+        return keys[j].value + (keys[i].value - keys[j].value) * rest * rest * rest * (1 + 3 * u)
+      }
       return (2*u3 - 3*u2 + 1) * keys[i].value + (-2*u3 + 3*u2) * keys[j].value
         + (u3 - 2*u2 + u) * h * slopes[i] + (u3 - u2) * h * slopes[j]
     }
@@ -193,7 +201,7 @@ enum EventFissionMotion {
   // A short load precedes a fast release. At full body size, actual point
   // offsets carry the leaves/window beyond their destinations, then reverse.
   private static let opening = Sequence(
-    duration: 0.54,
+    duration: 0.58,
     load: Track([(0, 0), (0.06, 0.45), (0.12, 1), (0.20, 0.60),
                  (0.26, 0.15), (0.30, 0)]),
     spread: Track([(0, 0), (0.04, 0.02), (0.12, 0.22), (0.22, 0.85), (0.30, 1)]),
@@ -210,7 +218,7 @@ enum EventFissionMotion {
     modeOverrun: Track([(0, 0), (0.20, 0), (0.30, 2.5), (0.39, 5),
                         (0.46, 5.0 / 3), (0.54, 0)]),
     editorOverrun: Track([(0, 0), (0.20, 0), (0.26, 6), (0.35, 12),
-                          (0.42, 4), (0.50, 0)]),
+                          (0.58, 0)], softLanding: true),
     receiverOffset: Track([(0, 0), (0.54, 0)])
   )
 
